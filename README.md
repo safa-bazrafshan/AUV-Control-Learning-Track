@@ -1,54 +1,101 @@
-# Week 1 – LQR Controller for AUV Depth Control
+# Classical and Robust Control for AUV Depth Regulation
 
-This folder contains the first part of the control learning track for the Autonomous Underwater Vehicle (AUV) system. It focuses on modeling the system using state-space representation and designing a Linear Quadratic Regulator (LQR) to control the depth of the vehicle.
+This folder contains the MATLAB implementation and simulation results for designing two control strategies to regulate the depth of an Autonomous Underwater Vehicle (AUV):
 
----
+1. Linear Quadratic Regulator (LQR)
+2. Sliding Mode Control (SMC)
 
-## 🔧 Objectives
-
-- Model the AUV depth system using second-order dynamics
-- Convert the model into state-space form
-- Analyze system stability using eigenvalues
-- Design an LQR controller
-- Explore the effect of Q and R matrices
-- Simulate and evaluate the system's performance
+Each method is implemented step-by-step and includes analysis of performance, robustness, and control effort.
 
 ---
 
-## 📂 Files
+## ⚙️ System Model
 
-| File | Description |
+The AUV depth dynamics are modeled as a second-order linear system:
+
+m * z''(t) + b * z'(t) + k * z(t) = u(t)
+
+Where:
+- m: mass of the vehicle  
+- b: damping coefficient  
+- k: hydrostatic stiffness  
+- u(t): control input (thrust)
+
+---
+
+## 📐 LQR Controller
+
+The LQR controller is designed using a state-space representation of the system. It minimizes a cost function to provide an optimal trade-off between state error and control effort.
+
+Key Steps:
+- Define A, B, Q, R matrices
+- Solve Riccati equation
+- Compute gain matrix K
+- Simulate step response
+
+File:
+- lqr_controller.m
+
+---
+
+## 🧱 Sliding Mode Control (SMC)
+
+Sliding Mode Control offers robust performance against model uncertainties and external disturbances. A sliding surface is defined, and the control law ensures convergence to and motion along this surface.
+
+Sliding surface:
+
+s(t) = de(t) + λ * e(t)
+
+Control law:
+
+u(t) = u_eq - η * tanh(k * s(t))
+
+Key Features:
+- High robustness  
+- Low sensitivity to parameter variations  
+- Chattering reduction via tanh
+
+Files:
+- smc_basic_stable.m: SMC with equivalent control  
+- smc_with_disturbance.m: SMC under sinusoidal disturbance  
+- smc_control_plot.m: Visualization of control effort
+
+---
+
+## 📈 Output Plots
+
+| Plot | Description |
 |------|-------------|
-| auv_state_space_model.m | State-space modeling of AUV depth system and step response |
-| lqr_controller.m        | Basic LQR design and simulation |
-| lqr_tuning_experiment.m | Compare different Q and R matrices and analyze system behavior |
+| smc_depth_response.png | Depth tracking under SMC with disturbance |
+| smc_control_signal.png | Control input behavior in SMC |
+
+> Plots show fast convergence to reference depth (5 m), with small overshoot and strong disturbance rejection.
 
 ---
 
-## 📈 Sample Output
+## 💡 Summary
 
-Simulated step responses for different Q/R tuning strategies are included in the /images folder.
-
----
-
-## ▶️ How to Run
-
-1. Open MATLAB
-2. Navigate to the Week1_LQR directory
-3. Run each .m file and observe the outputs
-4. Use saveas(gcf, 'filename.png') to save plots if needed
+| Method | Performance | Robustness | Complexity |
+|--------|-------------|------------|------------|
+| LQR | Smooth, optimal | Moderate | Low |
+| SMC | Fast, aggressive | High | Medium |
 
 ---
 
-## 📚 Concepts Used
+## 🚀 Next
 
-- State-Space Systems
-- Eigenvalue Analysis
-- LQR (Linear Quadratic Regulator)
-- MATLAB Control Toolbox
+Future steps include implementation of intelligent controllers such as:
+- Fuzzy logic
+- Adaptive fuzzy (ANFIS)
+- Model Reference Adaptive Control (MRAC)
+
+All implementations will be added to this repository progressively.
+
 
 ---
 
-## ✅ Next Step
-
-Move to [Week2_SMC](../Week2_SMC/) to learn about Sliding Mode Control and its robustness to disturbances.
+Developed by: Safa Bazrafshan  
+📧 safa.bazrafshan@gmail.com  
+🔗 [ORCID Profile](https://orcid.org/0009-0004-4029-9550)  
+🔗 [LinkedIn](https://www.linkedin.com/in/safa-bazrafshan-04100a29a)  
+🔗 [GitHub](https://github.com/safa-bazrafshan)
