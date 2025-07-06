@@ -140,6 +140,55 @@ To explore intelligent fuzzy methods for depth control and evaluate their perfor
 
 ---
 
+# AUV Depth Control – PID Controller (Baseline)
+
+This folder contains a basic PID controller designed for depth regulation of an Autonomous Underwater Vehicle (AUV).
+
+---
+
+## 🎯 Objective
+
+Use a classic PID control strategy to stabilize the AUV at a reference depth (5 meters), serving as a baseline for comparison with more advanced methods.
+
+---
+
+## 🧠 Method
+
+- Controller formula:
+
+\[
+u(t) = K_p \cdot e(t) + K_i \cdot \int e(t) dt + K_d \cdot \dot{e}(t)
+\]
+
+- Where:
+  - \( e = z_{ref} - z \)
+  - \( \dot{e} \approx -v \)
+
+- Gains used:
+  - Kp = 50
+  - Ki = 5
+  - Kd = 15
+
+---
+
+## 📈 Result
+
+- The AUV successfully reaches and stabilizes around the target depth of 5 meters
+- Slight overshoot is observed, which is typical in PID response
+
+<p align="center">
+  <img src="PID_Controller_Depth_Response.png" width="600"/>
+</p>
+
+---
+
+## 📁 Files
+
+- pid_controller.m → MATLAB code for simulation  
+- PID_Controller_Depth_Response.png → Plot of system response
+
+---
+
 ## 👤 Author
 
 Safa Bazrafshan  
