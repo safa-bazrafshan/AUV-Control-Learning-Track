@@ -83,64 +83,64 @@ Files:
 ---
 
 
-# AUV Depth Control – Fuzzy Rule-Based Controller 
+# AUV Depth Control – Fuzzy Logic Controllers (Phase 4)
 
-This folder contains the implementation of a fuzzy rule-based controller for the vertical depth control of an Autonomous Underwater Vehicle (AUV).
+This folder contains two fuzzy-based controllers used to regulate the depth of an Autonomous Underwater Vehicle (AUV):
 
-### ✅ Goal
-Design and simulate a Mamdani-style fuzzy controller using expert-defined rules, without training or learning (non-ANFIS). The controller aims to stabilize the AUV at a target depth (5 meters).
-
----
-
-### 🧠 Method
-
-- Inputs:  
-  - e → Depth error  
-  - de → Change in error (approximated via AUV velocity)
-
-- Output:  
-  - u → Control force applied to the AUV
-
-- System parameters:  
-  - Mass = 5 kg  
-  - Damping = 4 Ns/m  
-  - Stiffness = 3 N/m  
-
-- 5 triangular membership functions per input:  
-  NL, NS, ZE, PS, PL
-
-- 5×5 fuzzy rule table manually designed
-
-- A scalar gain of 2.5 applied to the defuzzified output to enhance the control strength
+- A manual rule-based fuzzy controller  
+- An adaptive neuro-fuzzy controller (ANFIS)
 
 ---
 
-### 📈 Results
+## 🎯 Objective
 
-The controller successfully stabilizes the AUV at approximately 3.8–4 meters with low overshoot and smooth convergence.
-
-> Although the target depth (5 m) is not perfectly reached, the system response remains stable and acceptable, making the controller usable as a baseline approach.
-
-<p align="center">
-  <img src="Fuzzy_Controller_Depth_Response.png" width="600"/>
-</p>
+To explore intelligent fuzzy methods for depth control and evaluate their performance in reaching and maintaining a 5-meter target depth.
 
 ---
 
-### 📁 Files
+## 1️⃣ Fuzzy Rule-Based Controller
 
-- fuzzy_rule_based_controller.m → Main simulation code  
-- Fuzzy_Controller_Depth_Response.png → Simulation plot
+- Inputs: error (e), delta error (de)
+- Output: control force (u)
+- Method: Triangular membership functions + manually defined 5x5 rule table
+- Result: System reaches approx. 4 meters and stabilizes
+
+📈  
+<img src="Fuzzy_Controller_Depth_Response.png" width="600"/>
 
 ---
 
-### 🔗 Previous Phases
-- [Phase 1: PID Controller](../lqr/README.md)
-- [Phase 2: LQR Controller](../smc/README.md)
+## 2️⃣ ANFIS-Based Controller
+
+- Training data generated from linear control rule u = Kp*e + Kd*de
+- FIS generated using genfis3, trained with MATLAB's anfis
+- Result: Depth stabilizes around 2.5–3 meters after training
+
+📈  
+<img src="ANFIS_Controller_Depth_Response.png" width="600"/>
 
 ---
 
-### 👤 Author
+## 🧪 Files
+
+| File | Description |
+|------|-------------|
+| fuzzy_rule_based_controller.m | Manual fuzzy logic controller  
+| train_anfis_controller.m | Generate training data + train ANFIS  
+| simulate_anfis_controller.m | Simulate trained ANFIS in AUV system  
+| anfis_controller.fis | Trained fuzzy inference system  
+| *.png | Plots of both control methods  
+
+---
+
+## 🔗 Previous Phases
+
+- [Phase 1: PID & LQR](../lqr/README.md)  
+- [Phase 2: SMC](../smc/README.md)
+
+---
+
+## 👤 Author
 
 Safa Bazrafshan  
 safa.bazrafshan@gmail.com  
