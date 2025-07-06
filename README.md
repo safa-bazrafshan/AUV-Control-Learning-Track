@@ -82,20 +82,68 @@ Files:
 
 ---
 
-## 🚀 Next
 
-Future steps include implementation of intelligent controllers such as:
-- Fuzzy logic
-- Adaptive fuzzy (ANFIS)
-- Model Reference Adaptive Control (MRAC)
+# AUV Depth Control – Fuzzy Rule-Based Controller 
 
-All implementations will be added to this repository progressively.
+This folder contains the implementation of a fuzzy rule-based controller for the vertical depth control of an Autonomous Underwater Vehicle (AUV).
 
+### ✅ Goal
+Design and simulate a Mamdani-style fuzzy controller using expert-defined rules, without training or learning (non-ANFIS). The controller aims to stabilize the AUV at a target depth (5 meters).
 
 ---
 
-Developed by: Safa Bazrafshan  
-📧 safa.bazrafshan@gmail.com  
-🔗 [ORCID Profile](https://orcid.org/0009-0004-4029-9550)  
-🔗 [LinkedIn](https://www.linkedin.com/in/safa-bazrafshan-04100a29a)  
-🔗 [GitHub](https://github.com/safa-bazrafshan)
+### 🧠 Method
+
+- Inputs:  
+  - e → Depth error  
+  - de → Change in error (approximated via AUV velocity)
+
+- Output:  
+  - u → Control force applied to the AUV
+
+- System parameters:  
+  - Mass = 5 kg  
+  - Damping = 4 Ns/m  
+  - Stiffness = 3 N/m  
+
+- 5 triangular membership functions per input:  
+  NL, NS, ZE, PS, PL
+
+- 5×5 fuzzy rule table manually designed
+
+- A scalar gain of 2.5 applied to the defuzzified output to enhance the control strength
+
+---
+
+### 📈 Results
+
+The controller successfully stabilizes the AUV at approximately 3.8–4 meters with low overshoot and smooth convergence.
+
+> Although the target depth (5 m) is not perfectly reached, the system response remains stable and acceptable, making the controller usable as a baseline approach.
+
+<p align="center">
+  <img src="Fuzzy_Controller_Depth_Response.png" width="600"/>
+</p>
+
+---
+
+### 📁 Files
+
+- fuzzy_rule_based_controller.m → Main simulation code  
+- Fuzzy_Controller_Depth_Response.png → Simulation plot
+
+---
+
+### 🔗 Previous Phases
+- [Phase 1: PID Controller](../lqr/README.md)
+- [Phase 2: LQR Controller](../smc/README.md)
+
+---
+
+### 👤 Author
+
+Safa Bazrafshan  
+safa.bazrafshan@gmail.com  
+[ORCID: 0009-0004-4029-9550](https://orcid.org/0009-0004-4029-9550)
+
+---
