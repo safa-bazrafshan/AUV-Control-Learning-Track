@@ -1,198 +1,63 @@
-# Classical and Robust Control for AUV Depth Regulation
+# 🌊 AUV Depth Control Project
 
-This folder contains the MATLAB implementation and simulation results for designing two control strategies to regulate the depth of an Autonomous Underwater Vehicle (AUV):
+This repository contains a step-by-step development of various control strategies for an Autonomous Underwater Vehicle (AUV) to regulate its vertical depth.
 
-1. Linear Quadratic Regulator (LQR)
-2. Sliding Mode Control (SMC)
-
-Each method is implemented step-by-step and includes analysis of performance, robustness, and control effort.
-
----
-
-## ⚙️ System Model
-
-The AUV depth dynamics are modeled as a second-order linear system:
-
-m * z''(t) + b * z'(t) + k * z(t) = u(t)
-
-Where:
-- m: mass of the vehicle  
-- b: damping coefficient  
-- k: hydrostatic stiffness  
-- u(t): control input (thrust)
-
----
-
-## 📐 LQR Controller
-
-The LQR controller is designed using a state-space representation of the system. It minimizes a cost function to provide an optimal trade-off between state error and control effort.
-
-Key Steps:
-- Define A, B, Q, R matrices
-- Solve Riccati equation
-- Compute gain matrix K
-- Simulate step response
-
-File:
-- lqr_controller.m
-
----
-
-## 🧱 Sliding Mode Control (SMC)
-
-Sliding Mode Control offers robust performance against model uncertainties and external disturbances. A sliding surface is defined, and the control law ensures convergence to and motion along this surface.
-
-Sliding surface:
-
-s(t) = de(t) + λ * e(t)
-
-Control law:
-
-u(t) = u_eq - η * tanh(k * s(t))
-
-Key Features:
-- High robustness  
-- Low sensitivity to parameter variations  
-- Chattering reduction via tanh
-
-Files:
-- smc_basic_stable.m: SMC with equivalent control  
-- smc_with_disturbance.m: SMC under sinusoidal disturbance  
-- smc_control_plot.m: Visualization of control effort
-
----
-
-## 📈 Output Plots
-
-| Plot | Description |
-|------|-------------|
-| smc_depth_response.png | Depth tracking under SMC with disturbance |
-| smc_control_signal.png | Control input behavior in SMC |
-
-> Plots show fast convergence to reference depth (5 m), with small overshoot and strong disturbance rejection.
-
----
-
-## 💡 Summary
-
-| Method | Performance | Robustness | Complexity |
-|--------|-------------|------------|------------|
-| LQR | Smooth, optimal | Moderate | Low |
-| SMC | Fast, aggressive | High | Medium |
-
----
-
-
-# AUV Depth Control – Fuzzy Logic Controllers (Phase 4)
-
-This folder contains two fuzzy-based controllers used to regulate the depth of an Autonomous Underwater Vehicle (AUV):
-
-- A manual rule-based fuzzy controller  
-- An adaptive neuro-fuzzy controller (ANFIS)
+The project progresses from classical to robust and intelligent controllers, and compares their performance.
 
 ---
 
 ## 🎯 Objective
 
-To explore intelligent fuzzy methods for depth control and evaluate their performance in reaching and maintaining a 5-meter target depth.
+Design, simulate, and evaluate different controllers for underwater depth regulation using MATLAB.
 
 ---
 
-## 1️⃣ Fuzzy Rule-Based Controller
+## 🧪 Control Phases Implemented
 
-- Inputs: error (e), delta error (de)
-- Output: control force (u)
-- Method: Triangular membership functions + manually defined 5x5 rule table
-- Result: System reaches approx. 4 meters and stabilizes
-
-📈  
-<img src="Fuzzy_Controller_Depth_Response.png" width="600"/>
-
----
-
-## 2️⃣ ANFIS-Based Controller
-
-- Training data generated from linear control rule u = Kp*e + Kd*de
-- FIS generated using genfis3, trained with MATLAB's anfis
-- Result: Depth stabilizes around 2.5–3 meters after training
-
-📈  
-<img src="ANFIS_Controller_Depth_Response.png" width="600"/>
+| Phase | Method | Description |
+|-------|--------|-------------|
+| [PID Controller](./pid_controller/) | Classical | Simple baseline controller using proportional-integral-derivative logic |
+| [LQR Controller](./lqr/) | Optimal Control | Minimizes a cost function for optimal tracking and effort |
+| [SMC Controller](./smc/) | Robust Control | Strong against disturbances using sliding surface |
+| [Fuzzy vs ANFIS](./fuzzy_vs_anfis_controller/) | Intelligent Control | Comparison between manual fuzzy rules and neuro-fuzzy learning (ANFIS) |
 
 ---
 
-## 🧪 Files
+## 📂 Folder Structure
 
-| File | Description |
-|------|-------------|
-| fuzzy_rule_based_controller.m | Manual fuzzy logic controller  
-| train_anfis_controller.m | Generate training data + train ANFIS  
-| simulate_anfis_controller.m | Simulate trained ANFIS in AUV system  
-| anfis_controller.fis | Trained fuzzy inference system  
-| *.png | Plots of both control methods  
+Each folder contains:
+
+- .m simulation files  
+- Output plots  
+- Individual README.md with method details
 
 ---
 
-## 🔗 Previous Phases
+## 📈 Sample Results
 
-- [Phase 1: PID & LQR](../lqr/README.md)  
-- [Phase 2: SMC](../smc/README.md)
-
----
-
-# AUV Depth Control – PID Controller (Baseline)
-
-This folder contains a basic PID controller designed for depth regulation of an Autonomous Underwater Vehicle (AUV).
+- PID reaches 5m with small overshoot  
+- LQR offers smooth optimal tracking  
+- SMC shows fast convergence & disturbance rejection  
+- ANFIS shows learning-based fuzzy control, but with some steady-state error
 
 ---
 
-## 🎯 Objective
+## 📚 Next Steps
 
-Use a classic PID control strategy to stabilize the AUV at a reference depth (5 meters), serving as a baseline for comparison with more advanced methods.
-
----
-
-## 🧠 Method
-
-- Controller formula:
-
-\[
-u(t) = K_p \cdot e(t) + K_i \cdot \int e(t) dt + K_d \cdot \dot{e}(t)
-\]
-
-- Where:
-  - \( e = z_{ref} - z \)
-  - \( \dot{e} \approx -v \)
-
-- Gains used:
-  - Kp = 50
-  - Ki = 5
-  - Kd = 15
-
----
-
-## 📈 Result
-
-- The AUV successfully reaches and stabilizes around the target depth of 5 meters
-- Slight overshoot is observed, which is typical in PID response
-
-<p align="center">
-  <img src="PID_Controller_Depth_Response.png" width="600"/>
-</p>
-
----
-
-## 📁 Files
-
-- pid_controller.m → MATLAB code for simulation  
-- PID_Controller_Depth_Response.png → Plot of system response
+- Implement adaptive control (MRAC)  
+- Explore hybrid and learning-based reinforcement controllers  
+- Prepare full scientific paper based on these results
 
 ---
 
 ## 👤 Author
 
 Safa Bazrafshan  
-safa.bazrafshan@gmail.com  
-[ORCID: 0009-0004-4029-9550](https://orcid.org/0009-0004-4029-9550)
+📧 safa.bazrafshan@gmail.com  
+🔗 [ORCID: 0009-0004-4029-9550](https://orcid.org/0009-0004-4029-9550)
 
 ---
+
+## 🧠 Keywords
+
+MATLAB · Control Systems · AUV · SMC · LQR · ANFIS · Fuzzy Logic · PID · Intelligent Control
