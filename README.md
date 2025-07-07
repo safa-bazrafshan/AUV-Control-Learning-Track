@@ -1,123 +1,131 @@
-# 🌊 AUV Depth Control – From Classical to Adaptive and Robust Strategies
+# 🌊 AUV Depth Control Project – From Classical to Intelligent & Robust Methods
 
-This repository contains the MATLAB implementation and simulation results for six control strategies applied to depth regulation of an Autonomous Underwater Vehicle (AUV).
-
-Each phase introduces a more advanced or robust method — moving from classical control to intelligent and adaptive designs.
+This repository presents a progressive control study of an Autonomous Underwater Vehicle (AUV) depth regulation system. Each phase demonstrates a more advanced control technique, from classical PID to robust and intelligent strategies.
 
 ---
 
 ## 📌 Control Phases Overview
 
-| Phase | Method                          | Purpose |
-|-------|----------------------------------|---------|
-| 1️⃣   | PID Controller                   | Classical baseline for depth control |
-| 2️⃣   | Linear Quadratic Regulator (LQR) | Optimal state-feedback design |
-| 3️⃣   | Sliding Mode Control (SMC)       | Robust control against modeling uncertainties |
-| 4️⃣   | Fuzzy Logic & ANFIS              | Intelligent nonlinear control |
-| 5️⃣   | Model Reference Adaptive Control | Adaptive real-time parameter adjustment |
-| 6️⃣   | DOBC (Disturbance Observer + LQR)| Robust control against unknown external disturbances |
+| Phase | Method                             | Goal |
+|-------|-------------------------------------|------|
+| 1️⃣   | PID Controller                      | Classical baseline depth control |
+| 2️⃣   | Linear Quadratic Regulator (LQR)    | Optimal state-feedback control |
+| 3️⃣   | Sliding Mode Control (SMC)          | Robust control against model uncertainties |
+| 4️⃣   | Fuzzy Logic + ANFIS                 | Intelligent nonlinear control |
+| 5️⃣   | Model Reference Adaptive Control    | Adaptive parameter tuning |
+| 6️⃣   | LQR + DOBC                          | Rejection of external disturbances |
+| 7️⃣   | Noise Rejection in Sensor Feedback  | Handling sensor noise via filtering |
 
 ---
 
-## ⚙️ System Description
+## ⚙️ AUV System Model
 
-The AUV is modeled as a second-order system:
+The AUV is modeled as a second-order linear system:
 
 \[
-\ddot{z}(t) = \frac{1}{m}(u(t) - b \dot{z}(t) - k z(t)) + d(t)
+m \ddot{z} + b \dot{z} + k z = u(t) + d(t)
 \]
 
 Where:
-- \( z(t) \): Depth of the AUV
-- \( u(t) \): Control input (thrust)
-- \( d(t) \): External disturbance (e.g., water current)
+- \( z(t) \): depth  
+- \( u(t) \): control input  
+- \( d(t) \): external disturbance (optional)  
+- \( m, b, k \): mass, damping, hydrostatic stiffness
 
 ---
 
-## 🔍 Phase Summaries
+## 🔍 Phase-by-Phase Summary
 
-### ✅ Phase 1: PID Controller
+### ✅ Phase 1 – PID Control
 
-- Implements classical PID law:
+- Basic proportional-integral-derivative control
+- Tuned manually: \( K_p = 50, K_i = 5, K_d = 15 \)
+- Result: Successful regulation with overshoot
+
+### ✅ Phase 2 – LQR Control
+
+- State-space design minimizing:
   \[
-  u(t) = K_p e + K_i \int e\,dt + K_d \dot{e}
+  J = \int (x^T Q x + u^T R u) dt
   \]
-- Provides a baseline with reasonable tracking and moderate overshoot
+- Optimal, smooth convergence
 
-### ✅ Phase 2: Linear Quadratic Regulator (LQR)
+### ✅ Phase 3 – Sliding Mode Control (SMC)
 
-- State-space controller minimizing:
-  \[
-  J = \int (x^T Q x + u^T R u)\,dt
-  \]
-- Produces smooth and optimal convergence
-
-### ✅ Phase 3: Sliding Mode Control (SMC)
-
-- Uses a sliding surface:
+- Defines a sliding surface:
   \[
   s = \dot{e} + \lambda e
   \]
-- Robust against parameter variations and disturbances
+- Robust to parameter uncertainty and external disturbances
 
-### ✅ Phase 4: Fuzzy Logic & ANFIS
+### ✅ Phase 4 – Fuzzy Logic & ANFIS
 
-- Fuzzy: Manual rule-based with triangular MFs
-- ANFIS: Trained using PID-like control data and genfis3
-- Nonlinear control with human-like reasoning
+- Manual fuzzy controller: 5×5 rule table
+- ANFIS: trained using data from a PID-like law
+- Nonlinear, adaptive behavior
 
-### ✅ Phase 5: MRAC (Model Reference Adaptive Control)
+### ✅ Phase 5 – MRAC (Adaptive Control)
 
-- Online parameter adaptation:
+- Reference model tracking with online parameter updates:
   \[
   \dot{\theta} = -\gamma \phi e
   \]
-- Tracks a reference model even with parameter mismatch
+- Works under unknown model parameters
 
-### ✅ Phase 6: DOBC with LQR
+### ✅ Phase 6 – LQR + DOBC
 
-- Observes external disturbance:
+- Adds a disturbance observer (DO):
   \[
   \hat{d}(t) = \text{LPF}(y - y_{nom})
   \]
-- Applies:
+- Final control:
   \[
-  u(t) = u_{nominal} - \hat{d}(t)
+  u = u_{nominal} - \hat{d}(t)
   \]
-- Improves performance in presence of unknown disturbances
+- Effectively cancels external disturbance
+
+### ✅ Phase 7 – Noise Rejection
+
+- Gaussian sensor noise added to depth feedback
+- Filtered using a Moving Average Filter:
+  \[
+  y_{filtered}(k) = \frac{1}{M} \sum_{i=0}^{M-1} y(k - i)
+  \]
+- Significantly reduces control chattering due to noise
 
 ---
 
 ## 📁 Folder Structure
 
-Each phase is in a dedicated folder:
-
 | Folder | Content |
 |--------|---------|
-| `/pid` | PID controller |
-| `/lqr` | LQR control |
-| `/smc` | Sliding Mode Control |
-| `/fuzzy_vs_anfis_controller` | Fuzzy + ANFIS methods |
+| `/pid` | Classical PID controller |
+| `/lqr` | Linear Quadratic Regulator |
+| `/smc` | Sliding Mode Controller |
+| `/fuzzy_vs_anfis_controller` | Fuzzy logic & ANFIS |
 | `/mrac` | Adaptive control (MRAC) |
-| `/dobc_lqr` | DOBC + LQR implementation |
+| `/dobc_lqr` | LQR with Disturbance Observer |
+| `/noise_rejection` | LQR with sensor noise + filtering |
 
 ---
 
-## 📊 Sample Plots
+## 🧪 Output Samples
 
-Each folder contains `.png` files showing:
+Each phase includes plots:
 - Depth tracking
 - Control effort
-- Disturbance estimation or parameter convergence
+- Parameter estimation (for MRAC)
+- Disturbance rejection & estimation
+- Noise suppression comparison
 
 ---
 
-## 📘 How to Use
+## 💡 How to Run
 
-1. Open MATLAB
-2. Navigate to the folder for the desired phase
-3. Run the `.m` files
-4. Observe and export results
+1. Open MATLAB  
+2. Navigate to the folder of a specific phase  
+3. Run the main `.m` file  
+4. Review and save results
 
 ---
 
@@ -129,8 +137,8 @@ Each folder contains `.png` files showing:
 
 ---
 
-## 💡 Contribution
+## 🤝 Contributions
 
-This project is open for educational use and scientific discussion. Feel free to explore, fork, or suggest improvements.
+This project is part of an academic and migration-focused learning journey. Feedback, forks, and collaborations are warmly welcome 💙
 
 ---
