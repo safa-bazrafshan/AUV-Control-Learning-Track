@@ -1,52 +1,97 @@
-# 🌊 AUV Depth Control Project
+# 🌊 AUV Depth Control – From Classical to Adaptive Controllers
 
-This repository contains a step-by-step development of various control strategies for an Autonomous Underwater Vehicle (AUV) to regulate its vertical depth.
+This repository contains MATLAB code and simulation results for designing and evaluating five control strategies to regulate the depth of an Autonomous Underwater Vehicle (AUV).
 
-The project progresses from classical to robust and intelligent controllers, and compares their performance.
-
----
-
-## 🎯 Objective
-
-Design, simulate, and evaluate different controllers for underwater depth regulation using MATLAB.
+The project progresses from basic PID control to more advanced and intelligent methods such as Fuzzy Logic, ANFIS, and MRAC.
 
 ---
 
-## 🧪 Control Phases Implemented
+## 📌 Control Phases
 
-| Phase | Method | Description |
-|-------|--------|-------------|
-| [PID Controller](./pid_controller/) | Classical | Simple baseline controller using proportional-integral-derivative logic |
-| [LQR Controller](./lqr/) | Optimal Control | Minimizes a cost function for optimal tracking and effort |
-| [SMC Controller](./smc/) | Robust Control | Strong against disturbances using sliding surface |
-| [Fuzzy vs ANFIS](./fuzzy_vs_anfis_controller/) | Intelligent Control | Comparison between manual fuzzy rules and neuro-fuzzy learning (ANFIS) |
-
----
-
-## 📂 Folder Structure
-
-Each folder contains:
-
-- .m simulation files  
-- Output plots  
-- Individual README.md with method details
+| Phase | Method                          | Description |
+|-------|----------------------------------|-------------|
+| 1️⃣   | PID Controller                   | Classical feedback control using proportional, integral, and derivative terms. |
+| 2️⃣   | Linear Quadratic Regulator (LQR) | Optimal state-feedback design minimizing a cost function. |
+| 3️⃣   | Sliding Mode Control (SMC)       | Nonlinear robust control strategy with disturbance rejection. |
+| 4️⃣   | Fuzzy Logic & ANFIS              | Intelligent controllers based on fuzzy rule sets and adaptive neuro-fuzzy learning. |
+| 5️⃣   | Model Reference Adaptive Control | Adaptive controller that updates its parameters in real time to follow a desired model. |
 
 ---
 
-## 📈 Sample Results
+## 📁 Folder Structure
 
-- PID reaches 5m with small overshoot  
-- LQR offers smooth optimal tracking  
-- SMC shows fast convergence & disturbance rejection  
-- ANFIS shows learning-based fuzzy control, but with some steady-state error
+Each folder contains the MATLAB scripts and output plots relevant to the corresponding phase.
+
+| Folder | Content |
+|--------|---------|
+| /pid | PID controller implementation and depth tracking plot. |
+| /lqr | LQR design using state-space model and performance analysis. |
+| /smc | SMC with and without external disturbance, and control effort plots. |
+| /fuzzy_vs_anfis_controller | Includes both fuzzy logic rule-based controller and ANFIS-based system. |
+| /mrac | MRAC implementation with damping, tracking reference model, and adaptive parameter plots. |
 
 ---
 
-## 📚 Next Steps
+## ⚙️ Techniques Summary
 
-- Implement adaptive control (MRAC)  
-- Explore hybrid and learning-based reinforcement controllers  
-- Prepare full scientific paper based on these results
+### 🔧 PID Controller
+- Simple and widely used.
+- Provides a baseline for comparison.
+- May show overshoot and slower convergence.
+
+### 📐 Linear Quadratic Regulator (LQR)
+- Minimizes:  
+  \[
+  J = \int (x^T Q x + u^T R u) dt
+  \]
+- Requires accurate state-space model.
+- Produces smooth and optimal response.
+
+### 🧱 Sliding Mode Control (SMC)
+- High robustness against uncertainties and external disturbances.
+- Uses a sliding surface:
+  \[
+  s = \dot{e} + \lambda e
+  \]
+- Control law:
+  \[
+  u = u_{eq} - \eta \cdot \tanh(k s)
+  \]
+- May cause chattering, handled by smoothing functions.
+
+### 🤖 Fuzzy Logic & ANFIS
+- Fuzzy: Rule-based, interpretable, expert-tuned.
+- ANFIS: Trained using datasets, combines fuzzy systems with learning algorithms.
+- Suitable for nonlinear, unknown, or complex models.
+
+### 🔄 MRAC (Model Reference Adaptive Control)
+- Tracks desired behavior from a predefined model.
+- Parameters adapt over time based on tracking error.
+- Final implementation includes damping and smooth convergence:
+  \[
+  \dot{\theta} = -\gamma \cdot \phi(t) \cdot e(t)
+  \]
+
+---
+
+## 📈 Results Overview
+
+Each phase includes time-domain response plots such as:
+
+- AUV depth tracking (vs reference model)
+- Control effort
+- Adaptive parameter convergence (for ANFIS and MRAC)
+
+Plots are saved as .png inside each folder.
+
+---
+
+## 📘 How to Use
+
+1. Open MATLAB.
+2. Navigate to the desired folder.
+3. Run the main script (e.g., pid_controller.m, mrac_depth_control_final.m)
+4. Review and export the plots.
 
 ---
 
@@ -58,6 +103,6 @@ Safa Bazrafshan
 
 ---
 
-## 🧠 Keywords
+## 💬 License & Contribution
 
-MATLAB · Control Systems · AUV · SMC · LQR · ANFIS · Fuzzy Logic · PID · Intelligent Control
+This repository is open for learning and academic collaboration. Feedback and contributions are welcome.
